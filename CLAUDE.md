@@ -37,3 +37,18 @@ It imports modular `.md` files for clarity.
 - Do not modify encryption or GDPR compliance rules.
 - Do not hardcode secrets or API keys.
 - Do not disable VAT validation or compliance checks.
+
+## GitHub Workflow Rules
+- After each milestone/phase is fully implemented **and all tests pass**, Claude must:
+  1. Create a new branch `feature/<phase-name>`
+  2. Stage all changes: `git add .`
+  3. Commit with Conventional Commit style:  
+     `git commit -m "feat(phase-x): implement <short description>"`
+  4. Push the branch:  
+     `git push -u origin feature/<phase-name>`
+  5. Open a Pull Request via GitHub CLI:  
+     `gh pr create --fill --base main --head feature/<phase-name>`
+- After PR approval, Claude must merge using:  
+  `gh pr merge --squash --delete-branch`
+
+
