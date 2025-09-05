@@ -1,4 +1,4 @@
-# Dutch AI-Driven Accounting System
+# Admini - Slimme Administratie
 
 > AI-powered bookkeeping and administration system designed specifically for Dutch entrepreneurs and SMEs, with full VAT compliance and Dutch language support.
 
@@ -20,7 +20,7 @@ This system automates manual accounting tasks using AI while ensuring full compl
 1. **Clone and setup environment**:
    ```bash
    git clone <repository-url>
-   cd dutch-ai-accounting
+   cd Admini
    cp .env.example .env
    cp frontend/.env.example frontend/.env
    ```

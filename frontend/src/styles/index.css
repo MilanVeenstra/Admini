@@ -2,27 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom styles for Dutch accounting system */
+/* Custom styles for Admini */
 @layer base {
   html {
-    font-family: system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
   }
   
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-admini-50 text-admini-900;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-dutch-blue-600 hover:bg-dutch-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors;
+    @apply bg-admini-800 hover:bg-admini-900 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
   }
   
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium py-2 px-4 rounded-lg transition-colors;
+    @apply bg-admini-100 hover:bg-admini-200 text-admini-800 font-medium py-3 px-6 rounded-lg transition-all duration-200 border border-admini-300;
   }
   
   .card {
-    @apply bg-white rounded-lg shadow-md p-6;
+    @apply bg-white rounded-xl shadow-sm border border-admini-200 p-6 hover:shadow-md transition-shadow duration-200;
+  }
+  
+  .admini-gradient {
+    background: linear-gradient(135deg, #343a40 0%, #495057 100%);
   }
 }

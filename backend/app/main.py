@@ -4,8 +4,8 @@ from app.core.config import settings
 from app.api.api_v1.api import api_router
 
 app = FastAPI(
-    title="Dutch AI Accounting System",
-    description="AI-driven accounting and administration system for the Dutch market",
+    title="Admini API",
+    description="AI-driven accounting and administration system for Dutch entrepreneurs",
     version="0.1.0",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
@@ -27,7 +27,7 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 async def root():
     """Health check endpoint"""
     return {
-        "message": "Dutch AI Accounting System API",
+        "message": "Admini API - Slimme Administratie",
         "version": "0.1.0",
         "status": "healthy"
     }
@@ -38,6 +38,6 @@ async def health_check():
     """Detailed health check endpoint"""
     return {
         "status": "healthy",
-        "service": "accounting-api",
+        "service": "admini-api",
         "version": "0.1.0"
     }

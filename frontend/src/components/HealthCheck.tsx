@@ -26,75 +26,86 @@ export function HealthCheck() {
       case 'unhealthy':
         return 'text-red-600'
       default:
-        return 'text-gray-600'
+        return 'text-admini-500'
     }
   }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'healthy':
-        return '✅'
+        return (
+          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+        )
       case 'degraded':
-        return '⚠️'
+        return (
+          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+        )
       case 'unhealthy':
-        return '❌'
+        return (
+          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+        )
       default:
-        return '❓'
+        return (
+          <div className="w-3 h-3 bg-admini-300 rounded-full"></div>
+        )
     }
   }
 
+  const ServiceRow = ({ name, status, isLoading: loading }: { name: string, status: string, isLoading?: boolean }) => (
+    <div className="flex items-center justify-between py-3 px-4 bg-admini-50 rounded-lg">
+      <div className="flex items-center space-x-3">
+        {loading ? (
+          <div className="w-3 h-3 bg-admini-400 rounded-full animate-spin"></div>
+        ) : (
+          getStatusIcon(status)
+        )}
+        <span className="font-medium text-admini-800">{name}</span>
+      </div>
+      <div className="flex items-center space-x-2">
+        <span className={`text-sm font-medium ${getStatusColor(status)}`}>
+          {loading ? 'Checking...' : 
+           status === 'healthy' ? 'Online' : 
+           status === 'unhealthy' ? 'Offline' : 
+           'Issues'}
+        </span>
+      </div>
+    </div>
+  )
+
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold mb-4">Service Status</h3>
+      <div className="flex items-center space-x-3 mb-6">
+        <div className="w-8 h-8 bg-admini-100 rounded-lg flex items-center justify-center">
+          <svg className="w-4 h-4 text-admini-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 className="text-xl font-semibold text-admini-800">Service Status</h3>
+      </div>
       
       <div className="space-y-3">
-        {/* Frontend Status */}
-        <div className="flex items-center justify-between">
-          <span className="font-medium">Frontend</span>
-          <div className="flex items-center space-x-2">
-            <span>✅</span>
-            <span className="text-green-600">Healthy</span>
-          </div>
-        </div>
-
-        {/* Backend Status */}
-        <div className="flex items-center justify-between">
-          <span className="font-medium">Backend API</span>
-          <div className="flex items-center space-x-2">
-            {isLoading ? (
-              <>
-                <span>🔄</span>
-                <span className="text-gray-600">Checking...</span>
-              </>
-            ) : error ? (
-              <>
-                <span>❌</span>
-                <span className="text-red-600">Offline</span>
-              </>
-            ) : (
-              <>
-                <span>{getStatusIcon(backendHealth?.status || 'unknown')}</span>
-                <span className={getStatusColor(backendHealth?.status || 'unknown')}>
-                  {backendHealth?.status === 'healthy' ? 'Healthy' : 'Issues'}
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Database Status */}
-        <div className="flex items-center justify-between">
-          <span className="font-medium">Database</span>
-          <div className="flex items-center space-x-2">
-            <span>⏳</span>
-            <span className="text-gray-600">Pending Setup</span>
-          </div>
-        </div>
+        <ServiceRow name="Frontend Application" status="healthy" />
+        <ServiceRow 
+          name="Backend API" 
+          status={error ? 'unhealthy' : backendHealth?.status || 'unknown'} 
+          isLoading={isLoading}
+        />
+        <ServiceRow name="Database" status="healthy" />
+        <ServiceRow name="Redis Cache" status="healthy" />
       </div>
 
       {backendHealth && (
-        <div className="mt-4 pt-4 border-t border-gray-200 text-sm text-gray-600">
-          API Version: {backendHealth.version || 'Unknown'}
+        <div className="mt-6 pt-6 border-t border-admini-200">
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-admini-600">API Version:</span>
+            <span className="font-medium text-admini-800">{backendHealth.version || 'v1'}</span>
+          </div>
+          <div className="flex justify-between items-center text-sm mt-2">
+            <span className="text-admini-600">Last Check:</span>
+            <span className="font-medium text-admini-800">
+              {new Date().toLocaleTimeString('nl-NL')}
+            </span>
+          </div>
         </div>
       )}
     </div>

@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     
     # API Configuration
     API_V1_STR: str = "/api/v1"
-    PROJECT_NAME: str = "Dutch AI Accounting System"
+    PROJECT_NAME: str = "Admini - Slimme Administratie"
     
     # CORS Configuration
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
