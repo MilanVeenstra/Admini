@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: dutch_accounting_db
+    environment:
+      POSTGRES_DB: accounting_db
+      POSTGRES_USER: accounting_user
+      POSTGRES_PASSWORD: accounting_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - accounting_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U accounting_user -d accounting_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching (future use)
+  redis:
+    image: redis:7-alpine
+    container_name: dutch_accounting_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - accounting_network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+  # Backend API (development)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: dutch_accounting_backend
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://accounting_user:accounting_pass@db:5432/accounting_db
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=development
+      - DEBUG=true
+    volumes:
+      - ./backend:/app
+      - backend_venv:/app/.venv
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - accounting_network
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Frontend (development)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: dutch_accounting_frontend
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - accounting_network
+    restart: unless-stopped
+
+networks:
+  accounting_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  backend_venv:
+    driver: local

@@ -1,0 +1,87 @@
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite3
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker
+.docker/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Secrets and keys
+*.pem
+*.key
+secrets/
+
+# Claude Code specific
+.claude/settings.json
+
+# Frontend specific
+frontend/dist/
+frontend/.vite/
+
+# Backend specific
+backend/.pytest_cache/
+backend/alembic/versions/*.py
+!backend/alembic/versions/.gitkeep
+
+# File uploads (development)
+uploads/
+documents/
+
+# AI models and training data
+models/
+training_data/
